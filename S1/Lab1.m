@@ -132,33 +132,107 @@ stemn(n, escalon(2-n)) # Señal escalon con operación combinada de inversión y de
 
 #   - Ejemplos:
 #     1. Crea una función que permita implementar la secuencia pulso de longitud L =4
+#función pulso en archivo
+
 #     2. Repita el apartado anterior, usando L como parámetro de entrada a la función
+#función en archivo
+
 #     3. Crea una función que permita generar la señal
 #         x = {-1, -1, -1, 1,0.8, 0.6, 0.4, 0.2, 0}
+#funcion secuancia creada en archivo
+
 #     4. Representa las siguientes señales y determine el elemento y[3]
+n = -10:10; #Secuencia de valores de -10 a 10
+
 #         I. y= delta[n-4]
+y1 = delta(n-4) #y1 = 0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0
+y1(14) #ans = 0
+
 #         II. y=pulso[n-2]
+y2 = pulso(n-2)# y2 =
+
 #         III. y=x[3-n]
+y3 = secuencia(3-n) # y3 = 0  0  0  0  0  0  0.2000  0.4000  0.6000  0.8000  1.0000  -1.0000  -1.0000  -1.0000
+#                  0  0  0  0  0  0  0
+y3(14) # ans = -1
+
 #         IV. y=x[n+2]
+y4 = secuencia(n+2) # y4 = 0  0  0  0  0  0  0  0  -1.0000  -1.0000  -1.0000   1.0000   0.8000   0.6000   0.4000   0.2000
+#                          0  0  0  0  0
+y4(14) # ans = 0.6000
+
 # d) Frecuencia discreta de señales senoidales
 #   - Crear señales discretas de tipo senoidal e identificar frecuencias discretas
 #      x[n]=cos (2 pi f n) n=0,1,2, ... N-1
+
+#frecuencias discretas -> Ciclos x Muestra
+
 #   - Frecuencia discreta máxima y alias
 #   - Relacionar la frecuencia discreta con la analógica y frecuencia de muestreo.
-#      f = F
-#      Fs
+
+#      f = F/Fs
+#      Fs >= 2F      Teorema de muestreo para que no se produzca aliasing
+
 #   - Crear señales de audio
 #   - Ejemplos:
 #     1. Con N = 20, crea y representa señales coseno con las siguientes
 #        frecuencias: f=0, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 1, 1.05, 1.1 e
 #        identifique los alias
+
+N = 20;
+n = 0:N-1;
+f = 0.9; # f=0, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 1, 1.05, 1.1
+fase = 0;
+
+x = cos(2*pi*f*n+fase);
+stem(n, x, 'linewidth', 2, 'markerfacecolor', 'b')
+
 #     2. Repita el apartado anterior con
 #        x[n]=cos (2 pi f n + pi/4 ) n=0,1,2, ... N-1 e identifique qué
 #        diferencias hay con respecto al caso apartado anterior
+
+N = 20;
+n = 0:N-1;
+f = 0.9;  # f=0, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 1, 1.05, 1.1
+x = cos(3*pi*f*n + pi/4);
+stem(n, x, 'linewidth', 2, 'markerfacecolor', 'b')
+
 #     3. Se utilizará un CAD, configurado a una Fs de 1kHz, para muestrear distintas
 #        señales analógicas de entrada. Determina cuál es la frecuencia discreta en
 #        cada caso y cuando se produce aliasing. F= 0, 50Hz, 100Hz, 250Hz, 500Hz,
 #        750Hz, 900Hz, 950Hz, 950Hz, 1kHz y 1100Hz.
+
+#      f = F/Fs
+#      Fs >= 2F      Teorema de muestreo para que no se produzca aliasing
+F = [0 50 100 250 500 750 900 950 1000 1100]
+Fs = 1000
+f = F/Fs # f = 0  0.0500  0.1000  0.2500  0.5000  0.7500  0.9000  0.9500  1.0000  1.1000
+
+w = 1*(Fs>=2*F) # w = 1   1   1   1   1   0   0   0   0   0
+#Hasta 0.5 (fqMax) se cumple el teorema de muestreo y no se produce aliasing
+#A partir de 0.5 no se cumple el T.Muestro y se produce aliasing
+
 #     4. Crea una señal senoidal para audio con una frecuencia de 500Hz durante
 #        1.5s. Cambie la frecuencia a 1kHz. Escuche el audio sabiendo que la
 #        Fs=8kHz.
+Fs=8000;
+F = 500;
+F2 = 1000;
+
+t = 1.5; #Duración
+f1 = F/Fs;
+f2 = F2/Fs;
+
+N = Fs*t;
+n=0:N-1;
+#no se como hacerla senoidal y que funcione
+x=cos(2*pi*f*n);
+
+plot(x);
+audiowrite('audio4_f1.wav', x, Fs);
+system('play audio4_f1.wav');
+
+
+
+
+
